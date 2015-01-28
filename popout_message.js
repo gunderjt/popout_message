@@ -33,9 +33,17 @@ $.fn.popout_message = function(opts){
   else{
     //store context
     current_settings.this = this;
-    //creates the element that will be popping out
+    //if use didn't pass in jquery object to use
     if(current_settings.popout_jquery_object === null || !current_settings.popout_jquery_object instanceof jQuery){
       current_settings.popout_jquery_object = create_popout(current_settings);
+    }
+    else{
+      //check if object is attached to document
+      if(!$.contains(document, current_settings.popout_jquery_object[0])){
+        current_settings.popout_jquery_object.appendTo(current_settings.container)
+      }
+      current_settings.popout_jquery_object.hide();
+
     }
     //binds the element to the behavior
     this.bind(current_settings.popoutEventType);
@@ -81,7 +89,7 @@ $.fn.popout_message = function(opts){
         }
         settings.popout_attr.id +=iterator;
       }
-      var elem = $(settings.popout);
+
       return $(settings.popout).hide().css(settings.popout_css)
            .attr(settings.popout_attr).html(settings.message).appendTo(settings.container);
     }
@@ -124,29 +132,3 @@ $.fn.popout_message = function(opts){
     }
   }
 };
-
-
-// $.fn.popout_message.onEvent = function(){
-//   this.bind(settings.eventType)
-// };
-// $.fn.popout_message.offEvent = function(){};
-$(document).ready(function(){
-  $("#jtg0").popout_message({ message: "This is the first message"});
-  $("#jtg1").popout_message("This is the second message");
-  $("#jtg2").popout_message({ message: "This is the third message",
-                              popout_css: {
-                                "background-color": "#999999",
-                                "color": "#00FF00",
-                              }
-  });
-  $("#jtg3").popout_message({ message: "This is the fourth message",
-                              popout_attr: {
-                                "id": "jeffs_hover_obj",
-                                "class": "jeff",
-                                "data-info": "222",
-                              }
-  });
-  $("#jtg4").popout_message({ message: "This is the fifth message"});
-  $("#jtg5").popout_message({ message: "This is the sixth message"});
-
-});
